@@ -1,0 +1,89 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Employee Report</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    
+    <script type="text/javascript">
+        function confirmDelete(id) {
+            document.getElementById('deleteEmployeeId').innerText = id;
+            $('#confirmDeleteModal').modal('show');
+        }
+
+        function deleteEmployee() {
+            var id = document.getElementById('deleteEmployeeId').innerText;
+            window.location.href = "<c:url value='/deleteEmployee/'/>" + id;
+        }
+    </script>
+</head>
+<body>
+    <div class="container mt-3">
+        <h3>Employee Report</h3>
+        <a href="<c:url value='/addEmployee' />" class="btn btn-primary mb-3">Add Employee</a>
+        <a href="<c:url value='/exportToCSV' />" class="btn btn-primary mb-3">Export to CSV</a>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Designation</th>
+                    <th>Department</th>
+                    <th>Salary</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Address</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="emp" items="${employee}">
+                    <tr>
+                        <td>${emp.id}</td>
+                        <td>${emp.name}</td>
+                        <td>${emp.designation}</td>
+                        <td>${emp.department}</td>
+                        <td>${emp.salary}</td>
+                        <td>${emp.email}</td>
+                        <td>${emp.phoneNumber}</td>
+                        <td>${emp.address}</td>
+                        <td>
+                            <a href="<c:url value='/editEmployee/${emp.id}' />" class="btn btn-primary">Edit</a>
+                            <a href="javascript:void(0);" onclick="confirmDelete(${emp.id})" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete the record with employee ID <span id="deleteEmployeeId"></span>?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteEmployee()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
